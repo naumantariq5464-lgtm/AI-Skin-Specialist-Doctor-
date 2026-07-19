@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Skin Specialist Doctor</title>
+  <meta name="description" content="AI-powered skin health advisor. Upload a skin image or ask a question to receive general skincare guidance from our AI specialist." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── Header ──────────────────────────────────────────────────────────── -->
+  <header>
+    <div class="header-logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+        <line x1="9" y1="9" x2="9.01" y2="9"/>
+        <line x1="15" y1="9" x2="15.01" y2="9"/>
+      </svg>
+    </div>
+    <div>
+      <div class="header-title">AI Skin Specialist Doctor</div>
+      <div class="header-sub">General skin health guidance · Not a replacement for a dermatologist</div>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="header-status">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Online</span>
+    </div>
+  </header>
+
+  <!-- ─── Main Layout ──────────────────────────────────────────────────────── -->
+  <main class="main-layout">
+
+    <!-- Left Panel -->
+    <aside class="left-panel">
+
+      <!-- Image Upload -->
+      <div class="panel-section">
+        <div class="section-label">Skin Image</div>
+
+        <div class="upload-zone" id="upload-zone" role="button" tabindex="0" aria-label="Upload skin image">
+          <input type="file" id="image-input" accept="image/jpeg,image/png,image/webp" aria-label="Select image file" />
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+          <div class="upload-text">
+            <strong>Click to upload</strong> or drag & drop<br/>
+            a photo of the affected skin area
+          </div>
+          <div class="upload-hint">JPEG · PNG · WebP · Max 10 MB</div>
+        </div>
+
+        <div class="image-preview" id="image-preview">
+          <img id="preview-img" src="" alt="Uploaded skin image preview" />
+          <div class="preview-overlay">
+            <button class="btn-icon" id="btn-remove-image" title="Remove image" aria-label="Remove uploaded image">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analyze Button -->
+      <div class="panel-section">
+        <button class="btn btn-primary btn-full" id="btn-analyze" disabled aria-label="Analyze uploaded image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          Analyze Image
+        </button>
+      </div>
+
+      <!-- Scope Info -->
+      <div class="panel-section">
+        <div class="section-label">What I Can Help With</div>
+        <div class="scope-tags">
+          <span class="scope-tag">Acne &amp; Breakouts</span>
+          <span class="scope-tag">Dry / Oily Skin</span>
+          <span class="scope-tag">Rashes &amp; Redness</span>
+          <span class="scope-tag">Eczema</span>
+          <span class="scope-tag">Psoriasis</span>
+          <span class="scope-tag">Pigmentation</span>
+          <span class="scope-tag">Skincare Routines</span>
+          <span class="scope-tag">Sun Protection</span>
+          <span class="scope-tag">Rosacea</span>
+          <span class="scope-tag">General Skin Health</span>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="panel-section">
+        <div class="info-box">
+          ⚕️ This tool provides <strong>general guidance only</strong>. It is not a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified dermatologist for serious concerns.
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Right Panel (Tabbed) -->
+    <section class="right-panel" aria-label="AI Assistant">
+
+      <!-- Tab Navigation -->
+      <nav class="tab-nav" role="tablist" aria-label="Assistant tabs" style="justify-content: space-between; align-items: center; display: flex;">
+        <div style="display: flex;">
+          <button class="tab-btn active" id="tab-skin" role="tab" aria-selected="true" aria-controls="chat-panel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <circle cx="8.5" cy="8.5" r="1.5"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            Skin Consultation
+          </button>
+          <button class="tab-btn" id="tab-symptom" role="tab" aria-selected="false" aria-controls="symptom-panel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+            Symptom Check
+          </button>
+        </div>
+        <button id="btn-clear" title="Clear conversation" aria-label="Clear current tab contents" style="background: none; border: none; cursor: pointer; color: var(--text-light); padding: 8px; display: flex; align-items: center; justify-content: center; transition: color var(--transition); border-radius: 4px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" style="pointer-events: none;">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <line x1="10" y1="11" x2="10" y2="17"/>
+            <line x1="14" y1="11" x2="14" y2="17"/>
+          </svg>
+        </button>
+      </nav>
+
+      <!-- ─── Tab 1: Skin Chat ──────────────────────────────────────── -->
+      <div id="chat-panel" role="tabpanel" aria-labelledby="tab-skin" style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-height:0;">
+
+        <!-- Chat Window -->
+        <div class="chat-window" id="chat-window" role="log" aria-live="polite" aria-label="Conversation">
+
+          <!-- Empty State -->
+          <div class="empty-state" id="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <h3>Start Your Consultation</h3>
+            <p>Upload a photo of the affected skin area, or type your skin concern below. I'll provide general guidance based on what I see or what you describe.</p>
+          </div>
+
+          <!-- Typing Indicator -->
+          <div class="typing-indicator" id="typing-indicator" aria-label="AI is thinking" role="status">
+            <div class="msg-avatar doctor" aria-hidden="true">AI</div>
+            <div class="typing-dots">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Input Bar -->
+        <div class="input-bar">
+          <div class="input-row">
+            <textarea
+              id="chat-input"
+              placeholder="Describe your skin concern or ask a question…"
+              rows="1"
+              aria-label="Type your skin concern"
+              maxlength="2000"
+            ></textarea>
+            <div class="input-actions">
+              <button class="btn-round" id="btn-mic" title="Record voice message" aria-label="Start voice recording">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="23"/>
+                  <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+              </button>
+              <button class="btn-round send" id="btn-send" title="Send message" aria-label="Send message">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="input-hint">Press Enter to send · Shift+Enter for new line · Mic for voice input</div>
+        </div>
+
+      </div>
+
+      <!-- ─── Tab 2: Symptom Checker ────────────────────────────────── -->
+      <div id="symptom-panel" class="symptom-panel" role="tabpanel" aria-labelledby="tab-symptom" style="display:none;">
+
+        <div class="symptom-body">
+          <div class="symptom-intro">
+            <h2>General Symptom Advisor</h2>
+            <p>Describe your symptoms in detail. I'll assess urgency, look up trusted medical sources, and guide you on the best next step.</p>
+          </div>
+
+          <!-- Symptom Input -->
+          <div class="symptom-input-card">
+            <textarea
+              id="symptom-input"
+              placeholder="Describe your symptoms… e.g. 'I have a high fever with body aches and chills for the past 2 days'"
+              aria-label="Describe your symptoms"
+              rows="4"
+            ></textarea>
+            <div class="symptom-actions">
+              <button class="btn btn-primary" id="btn-check-symptom" aria-label="Check symptoms">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                Check Symptoms
+              </button>
+              <button class="btn-round" id="btn-mic-symptom" title="Record symptom by voice" aria-label="Record voice symptom">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="23"/>
+                  <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div class="symptom-loading" id="symptom-loading" aria-live="polite">
+            <div class="typing-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span>Checking trusted medical sources…</span>
+          </div>
+
+          <!-- Results -->
+          <div id="symptom-results"></div>
+
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container" aria-live="assertive"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
